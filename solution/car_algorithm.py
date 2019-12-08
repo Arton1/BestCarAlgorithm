@@ -107,7 +107,7 @@ def new_car(world, offset, wheel_radius, wheel_separation, density=1.0,
     springs.append(spring)
     return chassis, wheels, springs
 
-class Car (Framework):
+class World (Framework):
     name = "Car"
     description = "Keys: left = a, brake = s, right = d, hz down = q, hz up = e"
     hz = 4
@@ -116,7 +116,7 @@ class Car (Framework):
     bridgePlanks = 20
 
     def __init__(self):
-        super(Car, self).__init__()
+        super(World, self).__init__()
 
         # The ground -- create some terrain
         ground = self.world.CreateStaticBody(
@@ -208,10 +208,10 @@ class Car (Framework):
                 spring.springFrequencyHz = self.hz
 
     def Step(self, settings):
-        super(Car, self).Step(settings)
+        super(World, self).Step(settings)
         self.viewCenter = (self.car.position.x, 20)
         self.Print("frequency = %g hz, damping ratio = %g" %
                    (self.hz, self.zeta))
 
 if __name__ == "__main__":
-    main(Car)
+    main(World)

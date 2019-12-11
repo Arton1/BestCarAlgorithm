@@ -21,8 +21,10 @@
 from solution.models.car import *
 
 from Box2D import (b2EdgeShape, b2FixtureDef, b2PolygonShape)
+from .framework import (Framework, Keys, main)
+import time
 
-
+CAR_NUM = 10
 
 
 class World (Framework):
@@ -38,7 +40,7 @@ class World (Framework):
 
         # The ground -- create some terrain
         ground = self.world.CreateStaticBody(
-            shapes=b2EdgeShape(vertices=[(-20, 0), (20, 0)])
+            shapes=b2EdgeShape(vertices=[(-20, 20), (20, 20)])
         )
 
         x, y1, dx = 20, 0, 5
@@ -87,27 +89,27 @@ class World (Framework):
         #               (161.0, -0.125), self.bridgePlanks)
 
         # Boxes
-        for y_pos in [0.5, 1.5, 2.5, 3.5, 4.5]:
-            self.world.CreateDynamicBody(
-                position=(230, y_pos),
-                fixtures=b2FixtureDef(
-                    shape=b2PolygonShape(box=(0.5, 0.5)),
-                    density=0.5,
-                )
-            )
 
-        car, wheels, springs = new_car(self.world, offset= (10, 40))
+        self.car, self.wheels, self.springs = [], [], []
+        genes = []
+        for i in range(0, CAR_NUM):
+            genes.append(Genotype())
 
-        car1, wheels1, springs1 =new_car(self.world,offset=(10,40))
-        self.car = car
-        self.wheels = wheels
-        self.springs = springs
 
-        self.car1 = car1
-        self.wheels1 = wheels1
-        self.springs1 = springs1
+
+        for i in range(0, CAR_NUM):
+           self.car.append(car_from_geneotype(self.world, genes[i], offset=(10, 40))[0])
+           self.wheels.append(car_from_geneotype(self.world, genes[i], offset=(10,40))[1])
+           self.car.append(car_from_geneotype(self.world, genes[i], offset=(10,40))[2])
+
+        self.time_start = time.time()
+
+
+
 
     def Keyboard(self, key):
+        if key == Keys.K_t:
+            self.time_start = time.time()
         if key == Keys.K_a:
             self.springs[0].motorSpeed = self.speed
         elif key == Keys.K_s:
@@ -125,9 +127,14 @@ class World (Framework):
 
     def Step(self, settings):
         super(World, self).Step(settings)
-        self.viewCenter = (self.car1.position.x, 20)
-        self.Print("frequency = %g hz, damping ratio = %g" %
-                   (self.hz, self.zeta))
+
+        x = 0
+        for i in range(0, 2*CAR_NUM, 2):
+            x = max(x, self.car[i].position.x)
+
+        self.viewCenter = (x, 20)
+        self.Print("frequency = %g hz, time = %g" %
+                   (self.hz, time.time()-self.time_start))
 
 if __name__ == "__main__":
     main(World)

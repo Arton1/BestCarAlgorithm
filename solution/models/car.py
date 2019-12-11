@@ -1,11 +1,11 @@
-from math import sqrt
+import math
+from solution.models.genotype import Genotype
 
 from Box2D import (b2CircleShape, b2EdgeShape, b2FixtureDef, b2PolygonShape,
                    b2_pi)
 
-from solution.framework import (Framework, Keys, main)
 
-def new_car(world, wheel_radius = 1.2,  density=1.0, offset = (0,0),
+def nice_car(world, wheel_radius=1.2, density=1.0, offset=(0, 0),
             wheel_friction=0.9, wheel_axis=(0.0, 1.0), wheel_torques=[200.0, 10.0],
             wheel_drives=[True, False], hz=4.0, zeta=0.7, **kwargs):
     x_offset, y_offset = offset
@@ -51,9 +51,9 @@ def new_car(world, wheel_radius = 1.2,  density=1.0, offset = (0,0),
         axis=(1, 0),
         motorSpeed=-10.0,
         maxMotorTorque=200,
-        enableMotor=True,
-        frequencyHz=hz,
-        dampingRatio=1000,
+        # enableMotor=True,
+        frequencyHz=60,
+        dampingRatio=1.0,
     )
 
     wheels.append(wheel)
@@ -76,11 +76,56 @@ def new_car(world, wheel_radius = 1.2,  density=1.0, offset = (0,0),
         axis=(1, 0),
         motorSpeed=-10.0,
         maxMotorTorque=200,
-        enableMotor=True,
-        frequencyHz=hz,
-        dampingRatio=1000
+        # enableMotor=True,
+        frequencyHz=60,
+        dampingRatio=1.0
     )
 
     wheels.append(wheel)
     springs.append(spring)
+    return chassis, wheels, springs
+
+
+def car_from_geneotype(world, genotype, offset=(10, 10)):
+    x_offset, y_offset = offset
+    points = []
+
+    for v in genotype.vectors:
+        points.append((math.cos(v[0]) * v[1], math.sin(v[0]) * v[1]))
+    chassis = world.CreateDynamicBody(position=(x_offset, y_offset))
+    for i in range(0, 10):
+        chassis.CreatePolygonFixture(vertices=[(0, 0), points[i % 10], points[(i + 1) % 10]], groupIndex=-1, density=1,
+                                     friction=0.3,
+                                     restitution=0.3)
+
+    wheels, springs = [], []
+
+    wheel_radius, wheel_speed, wheel_friction = genotype.wheelProporites
+
+    for i in range(0, 2):
+        x, y = points[genotype.wheelVertices[i]]
+        wheel = world.CreateDynamicBody(
+            position=(x_offset + x, y_offset - wheel_radius - y),
+            fixtures=b2FixtureDef(
+                shape=b2CircleShape(radius=wheel_radius),
+                density= 1,
+                groupIndex=-1
+            )
+        )
+
+        spring = world.CreateWheelJoint(
+            bodyA=chassis,
+            bodyB=wheel,
+            localAnchorA=(x, y),
+            localAnchorB=(0, 0),
+            axis=(1, 0),
+            motorSpeed=-10.0,
+            maxMotorTorque=200,
+            enableMotor=True,
+            frequencyHz= 60,
+            dampingRatio=0,
+        )
+
+        wheels.append(wheel)
+        springs.append(spring)
     return chassis, wheels, springs

@@ -20,7 +20,7 @@
 
 from .framework import (Framework, Keys, main)
 from .bridge import create_bridge
-from solution.Car import *
+from solution.car import *
 
 from Box2D import (b2EdgeShape, b2FixtureDef, b2PolygonShape,
                    b2_pi)
@@ -67,27 +67,27 @@ class World (Framework):
                 friction=0.6,
             )
 
-        # Teeter
-        body = self.world.CreateDynamicBody(
-            position=(140, 0.90),
-            fixtures=b2FixtureDef(
-                shape=b2PolygonShape(box=(10, 0.25)),
-                density=1.0,
-            )
-        )
+        # # Teeter
+        # body = self.world.CreateDynamicBody(
+        #     position=(140, 0.90),
+        #     fixtures=b2FixtureDef(
+        #         shape=b2PolygonShape(box=(10, 0.25)),
+        #         density=1.0,
+        #     )
+        # )
+        #
+        # self.world.CreateRevoluteJoint(
+        #     bodyA=ground,
+        #     bodyB=body,
+        #     anchor=body.position,
+        #     lowerAngle=-8.0 * b2_pi / 180.0,
+        #     upperAngle=8.0 * b2_pi / 180.0,
+        #     enableLimit=True,
+        # )
 
-        self.world.CreateRevoluteJoint(
-            bodyA=ground,
-            bodyB=body,
-            anchor=body.position,
-            lowerAngle=-8.0 * b2_pi / 180.0,
-            upperAngle=8.0 * b2_pi / 180.0,
-            enableLimit=True,
-        )
-
-        # Bridge
-        create_bridge(self.world, ground, (2.0, 0.25),
-                      (161.0, -0.125), self.bridgePlanks)
+        # # Bridge
+        # create_bridge(self.world, ground, (2.0, 0.25),
+        #               (161.0, -0.125), self.bridgePlanks)
 
         # Boxes
         for y_pos in [0.5, 1.5, 2.5, 3.5, 4.5]:

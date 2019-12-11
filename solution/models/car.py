@@ -3,7 +3,7 @@ from math import sqrt
 from Box2D import (b2CircleShape, b2EdgeShape, b2FixtureDef, b2PolygonShape,
                    b2_pi)
 
-from .framework import (Framework, Keys, main)
+from solution.framework import (Framework, Keys, main)
 
 def new_car(world, wheel_radius = 1.2,  density=1.0, offset = (0,0),
             wheel_friction=0.9, wheel_axis=(0.0, 1.0), wheel_torques=[200.0, 10.0],

@@ -18,12 +18,9 @@
 # misrepresented as being the original software.
 # 3. This notice may not be removed or altered from any source distribution.
 
-from .framework import (Framework, Keys, main)
-from .bridge import create_bridge
-from solution.car import *
+from solution.models.car import *
 
-from Box2D import (b2EdgeShape, b2FixtureDef, b2PolygonShape,
-                   b2_pi)
+from Box2D import (b2EdgeShape, b2FixtureDef, b2PolygonShape)
 
 
 

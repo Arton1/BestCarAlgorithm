@@ -19,7 +19,7 @@
 # 3. This notice may not be removed or altered from any source distribution.
 
 from solution.models.car import *
-
+from solution.models.track import *
 from Box2D import (b2EdgeShape, b2FixtureDef, b2PolygonShape)
 from .framework import (Framework, Keys, main)
 import time
@@ -37,71 +37,8 @@ class World (Framework):
 
     def __init__(self):
         super(World, self).__init__()
+        ground = track(self.world)
 
-        # The ground -- create some terrain
-        ground = self.world.CreateStaticBody(
-            shapes=b2EdgeShape(vertices=[(-20, 0), (20, 0)])
-        )
-
-        # x, y1, dx = 20, 0, 5
-        # vertices = [0.25, 1, 4, 0, 0, -1, -2, -2, -1.25, 0]
-        # for y2 in vertices * 2:  # iterate through vertices twice
-        #     ground.CreateEdgeFixture(
-        #         vertices=[(x, y1), (x + dx, y2)],
-        #         density=0,
-        #         friction=100,
-        #     )
-        #     y1 = y2
-        #     x += dx
-
-
-
-        x, y1, dx = 20, 0, 5
-        vertices = [0, 0, 0, 1, 2.5, 1.5, 0, 0, 2, 5, 9, 7, 5, 0, -3, -2, 0, 3, 6, -10, 0, 0, 0]
-        for y2 in vertices :  # iterate through vertices twice
-            ground.CreateEdgeFixture(
-                vertices=[(x, y1), (x + dx, y2)],
-                density=0,
-                friction=100,
-            )
-            y1 = y2
-            x += dx
-
-        x_offsets = [0, 80, 40, 20, 40]
-        x_lengths = [40, 40, 10, 40, 0]
-        y2s = [0, 0, 5, 0, 20]
-
-        for x_offset, x_length, y2 in zip(x_offsets, x_lengths, y2s):
-            x += x_offset
-            ground.CreateEdgeFixture(
-                vertices=[(x, 0), (x + x_length, y2)],
-                density=0,
-                friction=100,
-            )
-
-        # # Teeter
-        # body = self.world.CreateDynamicBody(
-        #     position=(140, 0.90),
-        #     fixtures=b2FixtureDef(
-        #         shape=b2PolygonShape(box=(10, 0.25)),
-        #         density=1.0,
-        #     )
-        # )
-        #
-        # self.world.CreateRevoluteJoint(
-        #     bodyA=ground,
-        #     bodyB=body,
-        #     anchor=body.position,
-        #     lowerAngle=-8.0 * b2_pi / 180.0,
-        #     upperAngle=8.0 * b2_pi / 180.0,
-        #     enableLimit=True,
-        # )
-
-        # # Bridge
-        # create_bridge(self.world, ground, (2.0, 0.25),
-        #               (161.0, -0.125), self.bridgePlanks)
-
-        # Boxes
 
         self.car, self.wheels, self.springs = [], [], []
         genes = []
@@ -114,11 +51,6 @@ class World (Framework):
            self.car.append(car_from_geneotype(self.world, genes[i], offset=(10, 10))[0])
            self.wheels.append(car_from_geneotype(self.world, genes[i], offset=(10,10))[1])
            self.car.append(car_from_geneotype(self.world, genes[i], offset=(10,10))[2])
-
-        # self.car.append(nice_car(self.world, offset = (10, 40))[0])
-        # self.wheels.append(nice_car(self.world, offset = (10, 40))[1])
-        # self.springs.append(nice_car(self.world, offset = (10, 40))[2])
-
 
         self.time_start = time.time()
 

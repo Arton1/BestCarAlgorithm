@@ -101,7 +101,7 @@ def car_from_geneotype(world, genotype, offset=(10, 10)):
 
     wheels, springs = [], []
 
-    wheel_radius, wheel_speed, wheel_friction = genotype.wheelProporites
+    wheel_radius, wheel_speed, wheel_friction, engine_torque = genotype.wheelProporties
 
     for i in range(0, 2):
         x, y = points[genotype.wheelVertices[i]]
@@ -122,7 +122,7 @@ def car_from_geneotype(world, genotype, offset=(10, 10)):
             localAnchorB=(0, 0),
             axis=(1, 0),
             motorSpeed=-wheel_speed[i],
-            maxMotorTorque=50,
+            maxMotorTorque=engine_torque[i],
             enableMotor=True,
             frequencyHz= 60,
             dampingRatio=0,

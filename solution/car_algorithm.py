@@ -24,7 +24,7 @@ from Box2D import (b2EdgeShape, b2FixtureDef, b2PolygonShape)
 from .framework import (Framework, Keys, main)
 import time
 
-CAR_NUM = 50
+CAR_NUM = 5
 
 
 class World (Framework):

@@ -16,9 +16,9 @@ class Genotype:
         self.vectors.sort()
         self.wheelVertices.append(random.randint(0, 9))
         self.wheelVertices.append(random.randint(0, 9))
-        self.wheelProporites.append(random.uniform(0.5, 2))
-        self.wheelProporites.append(random.uniform(0, 100))
-        self.wheelProporites.append(random.uniform(0, 1))
+        self.wheelProporites.append((random.uniform(0.5, 2), random.uniform(0.5, 2)))
+        self.wheelProporites.append((random.uniform(0, 100), random.uniform(0, 100)))
+        self.wheelProporites.append((random.uniform(0, 1), random.uniform(0, 1)))
 
     def __repr__(self):
        return str(self.wheelVertices) + str(self.evaluation)

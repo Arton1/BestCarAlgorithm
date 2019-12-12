@@ -39,7 +39,8 @@ def nice_car(world, wheel_radius=1.2, density=1.0, offset=(0, 0),
         fixtures=b2FixtureDef(
             shape=b2CircleShape(radius=wheel_radius),
             density=density,
-            groupIndex=-1
+            groupIndex=-1,
+            friction = 1000,
         )
     )
 
@@ -49,8 +50,8 @@ def nice_car(world, wheel_radius=1.2, density=1.0, offset=(0, 0),
         localAnchorA=(1, -3),
         localAnchorB=(0, 0),
         axis=(1, 0),
-        motorSpeed=-10.0,
-        maxMotorTorque=200,
+        # motorSpeed=0,
+        # maxMotorTorque=200,
         # enableMotor=True,
         frequencyHz=60,
         dampingRatio=1.0,
@@ -74,9 +75,9 @@ def nice_car(world, wheel_radius=1.2, density=1.0, offset=(0, 0),
         localAnchorA=(-3, 0),
         localAnchorB=(0, 0),
         axis=(1, 0),
-        motorSpeed=-10.0,
+        motorSpeed=0,
         maxMotorTorque=200,
-        # enableMotor=True,
+        enableMotor=True,
         frequencyHz=60,
         dampingRatio=1.0
     )
@@ -105,11 +106,12 @@ def car_from_geneotype(world, genotype, offset=(10, 10)):
     for i in range(0, 2):
         x, y = points[genotype.wheelVertices[i]]
         wheel = world.CreateDynamicBody(
-            position=(x_offset + x, y_offset - wheel_radius - y),
+            position=(x_offset + x, y_offset - wheel_radius[i] - y),
             fixtures=b2FixtureDef(
-                shape=b2CircleShape(radius=wheel_radius),
+                shape=b2CircleShape(radius=wheel_radius[i]),
                 density= 1,
-                groupIndex=-1
+                groupIndex=-1,
+                friction = wheel_friction[i]
             )
         )
 
@@ -119,8 +121,8 @@ def car_from_geneotype(world, genotype, offset=(10, 10)):
             localAnchorA=(x, y),
             localAnchorB=(0, 0),
             axis=(1, 0),
-            motorSpeed=-10.0,
-            maxMotorTorque=200,
+            motorSpeed=-wheel_speed[i],
+            maxMotorTorque=50,
             enableMotor=True,
             frequencyHz= 60,
             dampingRatio=0,

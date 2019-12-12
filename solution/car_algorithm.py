@@ -24,7 +24,7 @@ from Box2D import (b2EdgeShape, b2FixtureDef, b2PolygonShape)
 from .framework import (Framework, Keys, main)
 import time
 
-CAR_NUM = 10
+CAR_NUM = 50
 
 
 class World (Framework):
@@ -40,16 +40,29 @@ class World (Framework):
 
         # The ground -- create some terrain
         ground = self.world.CreateStaticBody(
-            shapes=b2EdgeShape(vertices=[(-20, 20), (20, 20)])
+            shapes=b2EdgeShape(vertices=[(-20, 0), (20, 0)])
         )
 
+        # x, y1, dx = 20, 0, 5
+        # vertices = [0.25, 1, 4, 0, 0, -1, -2, -2, -1.25, 0]
+        # for y2 in vertices * 2:  # iterate through vertices twice
+        #     ground.CreateEdgeFixture(
+        #         vertices=[(x, y1), (x + dx, y2)],
+        #         density=0,
+        #         friction=100,
+        #     )
+        #     y1 = y2
+        #     x += dx
+
+
+
         x, y1, dx = 20, 0, 5
-        vertices = [0.25, 1, 4, 0, 0, -1, -2, -2, -1.25, 0]
-        for y2 in vertices * 2:  # iterate through vertices twice
+        vertices = [0, 0, 0, 1, 2.5, 1.5, 0, 0, 2, 5, 9, 7, 5, 0, -3, -2, 0, 3, 6, -10, 0, 0, 0]
+        for y2 in vertices :  # iterate through vertices twice
             ground.CreateEdgeFixture(
                 vertices=[(x, y1), (x + dx, y2)],
                 density=0,
-                friction=0.6,
+                friction=100,
             )
             y1 = y2
             x += dx
@@ -63,7 +76,7 @@ class World (Framework):
             ground.CreateEdgeFixture(
                 vertices=[(x, 0), (x + x_length, y2)],
                 density=0,
-                friction=0.6,
+                friction=100,
             )
 
         # # Teeter
@@ -98,9 +111,14 @@ class World (Framework):
 
 
         for i in range(0, CAR_NUM):
-           self.car.append(car_from_geneotype(self.world, genes[i], offset=(10, 40))[0])
-           self.wheels.append(car_from_geneotype(self.world, genes[i], offset=(10,40))[1])
-           self.car.append(car_from_geneotype(self.world, genes[i], offset=(10,40))[2])
+           self.car.append(car_from_geneotype(self.world, genes[i], offset=(10, 10))[0])
+           self.wheels.append(car_from_geneotype(self.world, genes[i], offset=(10,10))[1])
+           self.car.append(car_from_geneotype(self.world, genes[i], offset=(10,10))[2])
+
+        # self.car.append(nice_car(self.world, offset = (10, 40))[0])
+        # self.wheels.append(nice_car(self.world, offset = (10, 40))[1])
+        # self.springs.append(nice_car(self.world, offset = (10, 40))[2])
+
 
         self.time_start = time.time()
 
@@ -111,11 +129,11 @@ class World (Framework):
         if key == Keys.K_t:
             self.time_start = time.time()
         if key == Keys.K_a:
-            self.springs[0].motorSpeed = self.speed
+            self.springs[0][1].motorSpeed = self.speed
         elif key == Keys.K_s:
-            self.springs[0].motorSpeed = 0
+            self.springs[0][1].motorSpeed = 0
         elif key == Keys.K_d:
-            self.springs[0].motorSpeed = -self.speed
+            self.springs[0][1].motorSpeed = -self.speed
         elif key in (Keys.K_q, Keys.K_e):
             if key == Keys.K_q:
                 self.hz = max(0, self.hz - 1.0)

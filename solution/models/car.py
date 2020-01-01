@@ -60,6 +60,7 @@ def nice_car(world, wheel_radius=1.2, density=1.0, offset=(0, 0),
     wheels.append(wheel)
     springs.append(spring)
 
+
     wheel = world.CreateDynamicBody(
         position=(x_offset - 3, y_offset - wheel_radius - 0),
         fixtures=b2FixtureDef(
@@ -93,7 +94,7 @@ def car_from_geneotype(world, genotype, offset=(10, 10)):
 
     for v in genotype.vectors:
         points.append((math.cos(v[0]) * v[1], math.sin(v[0]) * v[1]))
-    chassis = world.CreateDynamicBody(position=(x_offset, y_offset))
+    chassis = world.CreateDynamicBody(position=(x_offset, y_offset), userData = "car_chassis")
     for i in range(0, 10):
         chassis.CreatePolygonFixture(vertices=[(0, 0), points[i % 10], points[(i + 1) % 10]], groupIndex=-1, density=1,
                                      friction=0.3,
@@ -112,7 +113,8 @@ def car_from_geneotype(world, genotype, offset=(10, 10)):
                 density= 1,
                 groupIndex=-1,
                 friction = wheel_friction[i]
-            )
+            ),
+            userData = "car_wheel"
         )
 
         spring = world.CreateWheelJoint(

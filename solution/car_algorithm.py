@@ -24,67 +24,62 @@ from Box2D import (b2EdgeShape, b2FixtureDef, b2PolygonShape)
 from .framework import (Framework, Keys, main)
 import time
 
-CAR_NUM = 5
+CAR_NUM = 10
 
 
-class World (Framework):
-    name = "Car"
-    description = "Keys: left = a, brake = s, right = d, hz down = q, hz up = e"
-    hz = 4
-    zeta = 0.7
-    speed = 50
-    bridgePlanks = 20
-
+# Creating first population and the track
+class World(Framework):
     def __init__(self):
         super(World, self).__init__()
         ground = track(self.world)
 
-
-        self.car, self.wheels, self.springs = [], [], []
-        genes = []
+        self.genes = []
         for i in range(0, CAR_NUM):
-            genes.append(Genotype())
+            self.genes.append(Genotype())
 
-
-
-        for i in range(0, CAR_NUM):
-           self.car.append(car_from_geneotype(self.world, genes[i], offset=(10, 10))[0])
-           self.wheels.append(car_from_geneotype(self.world, genes[i], offset=(10,10))[1])
-           self.car.append(car_from_geneotype(self.world, genes[i], offset=(10,10))[2])
+        for gene in self.genes:
+            car_from_geneotype(self.world, Genotype(), offset=(10, 10))
 
         self.time_start = time.time()
 
+    # evaluates every genotype and deletes car objects
+    def stop_simulation(self):
+        j = 0
+        for i in range(2, 3 * CAR_NUM + 2, 3):
+            self.genes[j].evaluation = self.world.bodies[i].position[0]
+            j += 1
 
+        print(self.genes)
+        while len(self.world.bodies) > 2:
+            self.world.DestroyBody(self.world.bodies[2])
 
+    def create_generation(self):
+        for i in range(0, CAR_NUM):
+            car_from_geneotype(self.world, Genotype(), offset=(10, 10))
+        self.time_start = time.time()
 
     def Keyboard(self, key):
         if key == Keys.K_t:
-            self.time_start = time.time()
-        if key == Keys.K_a:
-            self.springs[0][1].motorSpeed = self.speed
-        elif key == Keys.K_s:
-            self.springs[0][1].motorSpeed = 0
-        elif key == Keys.K_d:
-            self.springs[0][1].motorSpeed = -self.speed
-        elif key in (Keys.K_q, Keys.K_e):
-            if key == Keys.K_q:
-                self.hz = max(0, self.hz - 1.0)
-            else:
-                self.hz += 1.0
-
-            for spring in self.springs:
-                spring.springFrequencyHz = self.hz
+            self.stop_simulation()
+        if key == Keys.K_c:
+            self.create_generation()
 
     def Step(self, settings):
         super(World, self).Step(settings)
 
-        x = 0
-        for i in range(0, 2*CAR_NUM, 2):
-            x = max(x, self.car[i].position.x)
+        x = 10
+        for i in range(2, 3 * CAR_NUM + 2, 3):
+            try:
+                x = max(x, self.world.bodies[i].position[0])
+            except IndexError:
+                x = 10
 
         self.viewCenter = (x, 20)
         self.Print("frequency = %g hz, time = %g" %
-                   (self.hz, time.time()-self.time_start))
+                   (4 , time.time() - self.time_start))
+
+    # TODO: genetic algorithm here
+
 
 if __name__ == "__main__":
     main(World)

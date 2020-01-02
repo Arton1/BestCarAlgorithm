@@ -22,63 +22,42 @@ from solution.models.car import *
 from solution.models.track import *
 from Box2D import (b2EdgeShape, b2FixtureDef, b2PolygonShape)
 from .framework import (Framework, Keys, main)
+from solution.evolutional_algorithm.population import Population
 import time
-
-CAR_NUM = 10
-
 
 # Creating first population and the track
 class World(Framework):
     def __init__(self):
         super(World, self).__init__()
-        ground = track(self.world)
-
-        self.genes = []
-        for i in range(0, CAR_NUM):
-            self.genes.append(Genotype())
-
-        for gene in self.genes:
-            car_from_geneotype(self.world, Genotype(), offset=(10, 10))
-
+        create_track(self.world)
+        self._population = Population()
+        create_cars(self.world, self._population)
         self.time_start = time.time()
 
     # evaluates every genotype and deletes car objects
     def stop_simulation(self):
-        j = 0
-        for i in range(2, 3 * CAR_NUM + 2, 3):
-            self.genes[j].evaluation = self.world.bodies[i].position[0]
-            j += 1
-
-        print(self.genes)
+        self._population.set_fitness(self.world)
         while len(self.world.bodies) > 2:
             self.world.DestroyBody(self.world.bodies[2])
-
-    def create_generation(self):
-        for i in range(0, CAR_NUM):
-            car_from_geneotype(self.world, Genotype(), offset=(10, 10))
-        self.time_start = time.time()
 
     def Keyboard(self, key):
         if key == Keys.K_t:
             self.stop_simulation()
         if key == Keys.K_c:
-            self.create_generation()
+            self._population = Population()
+            self.time_start = time.time()
 
     def Step(self, settings):
         super(World, self).Step(settings)
-
         x = 10
-        for i in range(2, 3 * CAR_NUM + 2, 3):
+        for i in range(2, 3 * len(self._population._candidates) + 2, 3):
             try:
                 x = max(x, self.world.bodies[i].position[0])
             except IndexError:
                 x = 10
-
         self.viewCenter = (x, 20)
         self.Print("frequency = %g hz, time = %g" %
-                   (4 , time.time() - self.time_start))
-
-    # TODO: genetic algorithm here
+                   (4, time.time() - self.time_start))
 
 
 if __name__ == "__main__":

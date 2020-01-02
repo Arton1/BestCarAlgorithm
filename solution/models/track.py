@@ -1,8 +1,10 @@
-from Box2D import (b2EdgeShape, b2FixtureDef, b2PolygonShape)
-def track(world):
+from Box2D import b2EdgeShape
+
+
+def create_track(world):
     ground = world.CreateStaticBody(
         shapes=b2EdgeShape(vertices=[(-20, 0), (20, 0)]),
-        userData = "track"
+        userData="track"
     )
     x, y1, dx = 20, 0, 5
     vertices = [0, 0, 0, 1, 2.5, 1.5, 0, 0, 2, 5, 9, 7, 5, 0, -3, -2, 0, 3, 6, -10, 0, 0, 0]
@@ -14,5 +16,3 @@ def track(world):
         )
         y1 = y2
         x += dx
-
-    return ground

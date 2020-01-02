@@ -36,7 +36,6 @@ class World(Framework):
 
     # evaluates every genotype and deletes car objects
     def stop_simulation(self):
-        self._population.set_fitness(self.world)
         while len(self.world.bodies) > 2:
             self.world.DestroyBody(self.world.bodies[2])
 
@@ -44,7 +43,13 @@ class World(Framework):
         if key == Keys.K_t:
             self.stop_simulation()
         if key == Keys.K_c:
-            self._population = Population()
+            self._population.set_fitness(self.world)
+            self._population.print_information()
+            self.stop_simulation()
+            self._population.evolve()
+            super(World, self).__init__()
+            create_track(self.world)
+            create_cars(self.world, self._population)
             self.time_start = time.time()
 
     def Step(self, settings):

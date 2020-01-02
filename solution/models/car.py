@@ -7,21 +7,22 @@ from Box2D import (b2CircleShape, b2EdgeShape, b2FixtureDef, b2PolygonShape,
 
 def create_cars(world, population, offset=(10, 10)):
     for genotype in population._candidates:
-        create_car(genotype, world, offset)
+        create_car(world, genotype, offset)
 
 
 def create_car(world, genotype, offset):
+    x_offset, y_offset = offset
     points = []
-    for (x, y) in genotype._vectors:
+    for x, y in genotype._vectors:
         points.append((math.cos(x) * y, math.sin(x) * y))
-    chassis = world.CreateDynamicBody(position=offset, userData="car_chassis")
-    for i in range(0, 10):
-        chassis.CreatePolygonFixture(vertices=[(0, 0), points[i % 10], points[(i + 1) % 10]], groupIndex=-1, density=1,
+    chassis = world.CreateDynamicBody(position=(x_offset, y_offset), userData = "car_chassis")
+    for index in range(10):
+        chassis.CreatePolygonFixture(vertices=[(0, 0), points[index % 10], points[(index + 1) % 10]], groupIndex=-1, density=1,
                                      friction=0.3,
                                      restitution=0.3)
     wheels = []
     springs = []
-    wheel_radius, wheel_speed, wheel_friction, engine_torque = genotype._wheelProporties
+    wheel_radius, wheel_speed, wheel_friction, engine_torque = genotype._wheel_properties
     x_offset, y_offset = offset
     for i in range(0, 2):
         x, y = points[genotype._wheel_vertices[i]]

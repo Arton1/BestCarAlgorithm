@@ -1,10 +1,10 @@
-from random import randint, random, sample
-from math import ceil, floor
+from random import randint, random, sample, uniform
+from math import ceil, floor, pi
 
 
 class Genotype:
     _MUTATIONS_CHANCE = 1/5  # percentage of individuals that get changed
-    _MUTATION_POINTS_AMOUNT = 1/30
+    _MUTATION_POINTS_AMOUNT = 3
     _AMOUNT_OF_CROSSOVER_POINTS = 1/5
 
     def __init__(self, vectors, wheel_vertices, wheel_proporties):
@@ -65,8 +65,23 @@ class Genotype:
         return first_child, second_child
 
     def mutate(self):
-        genes = self._get_genes_from_parameters()
-        while random() < self._MUTATIONS_CHANCE:
-            for mutation in range(ceil(len(genes)*self._MUTATION_POINTS_AMOUNT)):
-                genes[randint(0, len(self._solution)-1)] = randint(0, 1)
-            self._set_parameters_from_genes(genes)
+        if random() < self._MUTATIONS_CHANCE:  #while?
+            amount_of_genes = len(self._vectors)+len(self._wheel_vertices)+len(self._wheel_properties)
+            indexes = sample(range(amount_of_genes), self._MUTATION_POINTS_AMOUNT)
+            for index in indexes:
+                if index < len(self._vectors):
+                    self._vectors[index] = (random() * 2 * pi, uniform(0.1, 4))
+                elif index < len(self._vectors) + len(self._wheel_vertices):
+                    index -= len(self._vectors)
+                    self._wheel_vertices[index] = randint(0, 9)
+                else:
+                    index -= len(self._vectors) 
+                    index -= len(self._wheel_vertices)
+                    if index == 0:
+                        self._wheel_properties[0] = (uniform(0.5, 2), uniform(0.5, 2))
+                    elif index == 1:
+                        self._wheel_properties[1] = (uniform(0, 100), uniform(0, 100))
+                    elif index == 2:
+                        self._wheel_properties[2] = (uniform(0, 1), uniform(0, 1))
+                    else: 
+                        self._wheel_properties[3] = (uniform(0, 100), uniform(0, 100))

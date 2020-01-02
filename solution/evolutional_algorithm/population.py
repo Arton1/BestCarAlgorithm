@@ -4,9 +4,9 @@ from math import ceil, pi
 
 
 class Population:
-    _AMOUNT_OF_CANDIDATES = 40
+    _AMOUNT_OF_CANDIDATES = 10
     _AMOUNT_OF_CHILDREN = _AMOUNT_OF_CANDIDATES
-    _TOURNAMENT_SIZE = 7
+    _TOURNAMENT_SIZE = 3
 
     def __init__(self,
                  candidates_amount=_AMOUNT_OF_CANDIDATES,

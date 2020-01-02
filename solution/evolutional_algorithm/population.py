@@ -59,7 +59,7 @@ class Population:
         probability_sum = 0
         for potential_parent in candidates:
             fitness = potential_parent.get_fitness()
-            probability = 1 / (fitness*fitness_sum)
+            probability = fitness / fitness_sum
             probability_sum += probability
             if probability_sum > spin:
                 return potential_parent
@@ -79,7 +79,7 @@ class Population:
             index_sum += index
 
     def _best_select_individual(self, candidates_with_fitness):
-        return min(candidates, key=lambda x: x.get_fitness())
+        return max(candidates, key=lambda x: x.get_fitness())
 
     def _select_pair_of_parents(self):
         first_parent = self._tournament_select_individual(self._candidates)

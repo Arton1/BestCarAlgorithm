@@ -14,7 +14,7 @@ class Genotype:
             intervals.append(intervals[-1] + 360 / Genotype.AMOUNT_OF_VERTICES)
         vectors = []
         for i in range(0, Genotype.AMOUNT_OF_VERTICES):
-            vectors.append((uniform(intervals[i], intervals[i + 1]) * 3.14 / 180, uniform(0.1, Genotype.AMOUNT_OF_VERTICES)))
+            vectors.append((uniform(intervals[i], intervals[i + 1]) * 3.14 / 180, uniform(0.1, 4)))
         wheel_vertices = []
         wheel_vertices.append(randint(Genotype.AMOUNT_OF_VERTICES/2, Genotype.AMOUNT_OF_VERTICES-1))
         while(True):
@@ -98,7 +98,7 @@ class Genotype:
             indexes = sample(range(amount_of_genes), self._MUTATION_POINTS_AMOUNT)
             for index in indexes:
                 if index < len(self._vectors):
-                    self._vectors[index] = (uniform(2*pi/self.AMOUNT_OF_VERTICES*(index), 2*pi/self.AMOUNT_OF_VERTICES*(index+1)), uniform(0.1, self.AMOUNT_OF_VERTICES))
+                    self._vectors[index] = (uniform(2*pi/self.AMOUNT_OF_VERTICES*(index), 2*pi/self.AMOUNT_OF_VERTICES*(index+1)), uniform(0.1, 4))
                 elif index < len(self._vectors) + len(self._wheel_vertices):
                     index -= len(self._vectors)
                     while(True):

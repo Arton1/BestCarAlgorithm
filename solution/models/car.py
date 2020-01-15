@@ -18,14 +18,17 @@ def create_car(world, genotype, offset):
     wheels = []
     springs = []
     wheel_radius, wheel_speed, wheel_friction, engine_torque = genotype._wheel_properties
+
+    y_offset = 0
     for x, y in genotype._vectors:
+        y_offset = max(y_offset, abs(math.sin(x)*y))
         points.append((math.cos(x) * y, math.sin(x) * y))
 
-    y_offset += max(wheel_radius[0], wheel_radius[1])
+    y_offset += max(wheel_radius[0], wheel_radius[1]) + 0.5
     chassis = world.CreateDynamicBody(position=(x_offset, y_offset), userData="car_chassis")
     for index in range(Genotype.AMOUNT_OF_VERTICES):
         chassis.CreatePolygonFixture(vertices=[(0, 0), points[index % Genotype.AMOUNT_OF_VERTICES], points[(index + 1) % Genotype.AMOUNT_OF_VERTICES]], groupIndex=-1,
-                                     density=50,
+                                     density=50, restitution = 0
                                     )
 
     # x_offset, y_offset = offset
@@ -37,7 +40,8 @@ def create_car(world, genotype, offset):
                 shape=b2CircleShape(radius=wheel_radius[i]),
                 density=1,
                 groupIndex=-1,
-                friction=wheel_friction[i]
+                friction=wheel_friction[i],
+                restitution = 0
             ),
             userData="car_wheel"
         )

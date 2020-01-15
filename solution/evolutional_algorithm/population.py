@@ -93,9 +93,9 @@ class Population:
         return max(candidates, key=lambda x: x.get_fitness())
 
     def _select_pair_of_parents(self):
-        first_parent = self._tournament_select_individual(self._candidates)
+        first_parent = self._roulette_select_individual(self._candidates)
         self._candidates.remove(first_parent)
-        second_parent = self._tournament_select_individual(self._candidates)
+        second_parent = self._roulette_select_individual(self._candidates)
         self._candidates.append(first_parent)
         return first_parent, second_parent
 

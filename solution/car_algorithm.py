@@ -25,32 +25,51 @@ from .framework import (Framework, Keys, main)
 from solution.evolutional_algorithm.population import Population
 import time
 
+
 # Creating first population and the track
 class World(Framework):
     def __init__(self):
         super(World, self).__init__()
         create_track(self.world)
         self._population = Population()
-        create_cars(self.world, self._population)
+        # self.springs = nice_car(self.world, offset=(10, 10))
+        self.springs = create_cars(self.world, self._population)
         self.time_start = time.time()
+        self.average = 0
+        self.generation = 1
+        self.f = open("average.txt", "w+")
 
     # evaluates every genotype and deletes car objects
     def stop_simulation(self):
         while len(self.world.bodies) > 2:
             self.world.DestroyBody(self.world.bodies[2])
 
+    def sim(self):
+        self._population.set_fitness(self.world)
+        statistic =  self._population.print_information()
+        self.average = statistic[0]
+        self.generation = statistic[1]
+        self.stop_simulation()
+        self._population.evolve()
+        super(World, self).__init__()
+        create_track(self.world)
+        self.springs.clear()
+        self.springs = create_cars(self.world, self._population)
+        self.time_start = time.time()
+        self.f.write("%g\n" %(self.average/(self._population._AMOUNT_OF_CANDIDATES)))
+
+    def start_engines(self):
+        for spring in self.springs:
+            spring[0].motorEnabled = True
+            spring[1].motorEnabled = True
+
     def Keyboard(self, key):
         if key == Keys.K_t:
-            self.stop_simulation()
+            self.springs[0].motorEnabled = True
+            self.springs[1].motorEnabled = True
+            # self.stop_simulation()
         if key == Keys.K_c:
-            self._population.set_fitness(self.world)
-            self._population.print_information()
-            self.stop_simulation()
-            self._population.evolve()
-            super(World, self).__init__()
-            create_track(self.world)
-            create_cars(self.world, self._population)
-            self.time_start = time.time()
+            self.sim()
 
     def Step(self, settings):
         super(World, self).Step(settings)
@@ -61,8 +80,11 @@ class World(Framework):
             except IndexError:
                 x = 10
         self.viewCenter = (x, 20)
-        self.Print("frequency = %g hz, time = %g" %
-                   (4, time.time() - self.time_start))
+        self.Print("generation = %g, average = %g hz, time = %g" %
+                   (self.generation ,self.average/(self._population._AMOUNT_OF_CANDIDATES), time.time() - self.time_start))
+
+        # if (time.time() - self.time_start > 2 and time.time() - self.time_start < 3 ) : self.start_engines()
+        if (time.time() - self.time_start > 10):  self.sim()
 
 
 if __name__ == "__main__":

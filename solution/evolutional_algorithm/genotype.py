@@ -4,8 +4,9 @@ from math import ceil, floor, pi
 
 class Genotype:
     _MUTATIONS_CHANCE = 1/5  # percentage of individuals that get changed
-    _MUTATION_POINTS_AMOUNT = 3
-    _AMOUNT_OF_CROSSOVER_POINTS = 1/5
+    _MUTATION_POINTS_AMOUNT = 7
+    _AMOUNT_OF_CROSSOVER_POINTS = 1/2
+    vertices = 4
 
     def __init__(self, vectors, wheel_vertices, wheel_proporties):
         self._vectors = vectors
@@ -70,18 +71,18 @@ class Genotype:
             indexes = sample(range(amount_of_genes), self._MUTATION_POINTS_AMOUNT)
             for index in indexes:
                 if index < len(self._vectors):
-                    self._vectors[index] = (random() * 2 * pi, uniform(0.1, 4))
+                    self._vectors[index] = (uniform(2*pi/self.vertices*(index), 2*pi/self.vertices*(index+1)), uniform(0.1, 4))
                 elif index < len(self._vectors) + len(self._wheel_vertices):
                     index -= len(self._vectors)
-                    self._wheel_vertices[index] = randint(0, 9)
+                    self._wheel_vertices[index] = randint(0, self.vertices-1)
                 else:
                     index -= len(self._vectors) 
                     index -= len(self._wheel_vertices)
                     if index == 0:
                         self._wheel_properties[0] = (uniform(0.5, 2), uniform(0.5, 2))
                     elif index == 1:
-                        self._wheel_properties[1] = (uniform(0, 100), uniform(0, 100))
+                        self._wheel_properties[1] = (uniform(10, 40), uniform(10, 40))
                     elif index == 2:
                         self._wheel_properties[2] = (uniform(0, 1), uniform(0, 1))
                     else: 
-                        self._wheel_properties[3] = (uniform(0, 100), uniform(0, 100))
+                        self._wheel_properties[3] = (uniform(200, 200), uniform(200, 200))

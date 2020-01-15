@@ -28,7 +28,7 @@ def create_car(world, genotype, offset):
     chassis = world.CreateDynamicBody(position=(x_offset, y_offset), userData="car_chassis")
     for index in range(Genotype.AMOUNT_OF_VERTICES):
         chassis.CreatePolygonFixture(vertices=[(0, 0), points[index % Genotype.AMOUNT_OF_VERTICES], points[(index + 1) % Genotype.AMOUNT_OF_VERTICES]], groupIndex=-1,
-                                     density=50, restitution = 0
+                                     density=20, restitution = 0
                                     )
 
     # x_offset, y_offset = offset

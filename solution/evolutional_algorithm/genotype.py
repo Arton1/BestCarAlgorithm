@@ -4,7 +4,7 @@ from math import ceil, floor, pi
 
 class Genotype:
     _MUTATIONS_CHANCE = 1/5  # percentage of individuals that get changed
-    _MUTATION_POINTS_AMOUNT = 7
+    _MUTATION_POINTS_AMOUNT = 1
     _AMOUNT_OF_CROSSOVER_POINTS = 1/2
     AMOUNT_OF_VERTICES = 4
 

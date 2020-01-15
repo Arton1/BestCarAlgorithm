@@ -80,8 +80,8 @@ class World(Framework):
             except IndexError:
                 x = 10
         self.viewCenter = (x, 20)
-        self.Print("generation = %g, average = %g hz, time = %g" %
-                   (self.generation ,self.average/(self._population._AMOUNT_OF_CANDIDATES), time.time() - self.time_start))
+        self.Print("generation = %g, average = %g, time = %g, current max = %g" %
+                   (self.generation ,self.average/(self._population._AMOUNT_OF_CANDIDATES), time.time() - self.time_start, x))
 
         # if (time.time() - self.time_start > 2 and time.time() - self.time_start < 3 ) : self.start_engines()
         if (time.time() - self.time_start > 10):  self.sim()

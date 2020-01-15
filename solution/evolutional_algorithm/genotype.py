@@ -6,7 +6,7 @@ class Genotype:
     _MUTATIONS_CHANCE = 1/5  # percentage of individuals that get changed
     _MUTATION_POINTS_AMOUNT = 1
     _AMOUNT_OF_CROSSOVER_POINTS = 1/2
-    AMOUNT_OF_VERTICES = 12
+    AMOUNT_OF_VERTICES = 6
 
     def create_new():
         intervals = [0]

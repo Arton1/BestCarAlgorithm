@@ -35,8 +35,7 @@ class World(Framework):
         # self.springs = nice_car(self.world, offset=(10, 10))
         self.springs = create_cars(self.world, self._population)
         self.time_start = time.time()
-        self.average = 0
-        self.generation = 1
+        self.lastInformation = (0, 0)
         self.f = open("average.txt", "w+")
 
     # evaluates every genotype and deletes car objects
@@ -46,9 +45,8 @@ class World(Framework):
 
     def sim(self):
         self._population.set_fitness(self.world)
-        statistic =  self._population.print_information()
-        self.average = statistic[0]
-        self.generation = statistic[1]
+        self._population.print_information()
+        statistics =  self._population.get_statistics()
         self.stop_simulation()
         self._population.evolve()
         super(World, self).__init__()
@@ -56,7 +54,7 @@ class World(Framework):
         self.springs.clear()
         self.springs = create_cars(self.world, self._population)
         self.time_start = time.time()
-        self.f.write("%g\n" %(self.average/(self._population._AMOUNT_OF_CANDIDATES)))
+        return statistics
 
     def start_engines(self):
         for spring in self.springs:
@@ -80,12 +78,11 @@ class World(Framework):
             except IndexError:
                 x = 10
         self.viewCenter = (x, 20)
-        self.Print("generation = %g, average = %g, time = %g, current max = %g" %
-                   (self.generation ,self.average/(self._population._AMOUNT_OF_CANDIDATES), time.time() - self.time_start, x))
-
-        # if (time.time() - self.time_start > 2 and time.time() - self.time_start < 3 ) : self.start_engines()
-        if (time.time() - self.time_start > 13):  self.sim()
-
+        generation, average = self.lastInformation
+        self.Print(f"generation = {generation:3}, average = {average:.2f}, time = {time.time()-self.time_start:.2f}, best = {x:.2f}")
+        if (time.time() - self.time_start > 13): 
+            self.lastInformation = self.sim()
+            self.f.write(f"{self.lastInformation[1]}\n")
 
 if __name__ == "__main__":
     main(World)

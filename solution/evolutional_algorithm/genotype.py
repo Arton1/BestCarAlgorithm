@@ -6,7 +6,7 @@ class Genotype:
     _MUTATIONS_CHANCE = 1/5  # percentage of individuals that get changed
     _MUTATION_POINTS_AMOUNT = 2
     _AMOUNT_OF_CROSSOVER_POINTS = 6
-    AMOUNT_OF_VERTICES = 12
+    AMOUNT_OF_VERTICES = 6
 
     def create_new():
         intervals = [0]
@@ -93,7 +93,7 @@ class Genotype:
         return first_child, second_child
 
     def mutate(self):
-        if random() < self._MUTATIONS_CHANCE:  #while?
+        if random() < self._MUTATIONS_CHANCE:  
             amount_of_genes = len(self._vectors)+len(self._wheel_vertices)+len(self._wheel_properties)
             indexes = sample(range(amount_of_genes), self._MUTATION_POINTS_AMOUNT)
             for index in indexes:

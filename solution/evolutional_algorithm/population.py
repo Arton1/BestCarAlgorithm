@@ -5,7 +5,7 @@ from math import ceil, pi
 
 class Population:
     _AMOUNT_OF_CANDIDATES = 50
-    _AMOUNT_OF_CHILDREN = 30
+    _AMOUNT_OF_CHILDREN = _AMOUNT_OF_CANDIDATES
     _TOURNAMENT_SIZE = 10
 
     def __init__(self,
@@ -23,15 +23,17 @@ class Population:
             self._candidates.append(Genotype.create_new())
 
     def print_information(self):
-        sum = 0
         print(f"Generacja: {self._generation}")
         for index, genotype in enumerate(sorted(self._candidates, key=lambda x: x.get_fitness(), reverse=True)):
             fitness = genotype.get_fitness()
             print(f"{index + 1} : {fitness}")
-            sum += fitness
-        return sum, self._generation
-        # print(f"{index+1}: {individual.get_information()} : {fitness}")
 
+    def get_statistics(self):
+        sum = 0
+        for genotype in self._candidates:
+            sum += genotype.get_fitness()
+        return self._generation, sum/len(self._candidates)
+        
     def set_fitness(self, world):
         for (genotype, i) in zip(self._candidates, range(2, 3 * len(self._candidates) + 2, 3)):
             genotype.evaluate_fitness(world.bodies[i].position[0])

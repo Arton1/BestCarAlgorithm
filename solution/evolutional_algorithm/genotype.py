@@ -6,8 +6,35 @@ class Genotype:
     _MUTATIONS_CHANCE = 1/5  # percentage of individuals that get changed
     _MUTATION_POINTS_AMOUNT = 7
     _AMOUNT_OF_CROSSOVER_POINTS = 1/2
-    vertices = 4
+    AMOUNT_OF_VERTICES = 4
 
+    def create_new():
+        intervals = [0]
+        for i in range(0, Genotype.AMOUNT_OF_VERTICES):
+            intervals.append(intervals[-1] + 360 / Genotype.AMOUNT_OF_VERTICES)
+        vectors = []
+        for i in range(0, Genotype.AMOUNT_OF_VERTICES):
+            vectors.append((uniform(intervals[i], intervals[i + 1]) * 3.14 / 180, uniform(0.1, 4)))
+        wheel_vertices = []
+        wheel_vertices.append(randint(Genotype.AMOUNT_OF_VERTICES/2, Genotype.AMOUNT_OF_VERTICES-1))
+        while(True):
+            random_vertex = randint(Genotype.AMOUNT_OF_VERTICES/2, Genotype.AMOUNT_OF_VERTICES-1)
+            viable = True
+            for vertex in wheel_vertices:
+                if vertex == random_vertex:
+                    viable = False
+                    break
+            if viable:
+                wheel_vertices.append(random_vertex)
+                break
+        wheel_properties = []
+        wheel_properties.append((uniform(0.5, 2), uniform(0.5, 2)))
+        wheel_properties.append((uniform(10, 40), uniform(10, 40)))
+        wheel_properties.append((uniform(0, 1), uniform(0, 1)))
+        wheel_properties.append((uniform(200, 200), uniform(200, 200)))
+        individual = Genotype(vectors, wheel_vertices, wheel_properties)
+        return individual
+        
     def __init__(self, vectors, wheel_vertices, wheel_proporties):
         self._vectors = vectors
         self._wheel_vertices = wheel_vertices
@@ -71,10 +98,19 @@ class Genotype:
             indexes = sample(range(amount_of_genes), self._MUTATION_POINTS_AMOUNT)
             for index in indexes:
                 if index < len(self._vectors):
-                    self._vectors[index] = (uniform(2*pi/self.vertices*(index), 2*pi/self.vertices*(index+1)), uniform(0.1, 4))
+                    self._vectors[index] = (uniform(2*pi/self.AMOUNT_OF_VERTICES*(index), 2*pi/self.AMOUNT_OF_VERTICES*(index+1)), uniform(0.1, 4))
                 elif index < len(self._vectors) + len(self._wheel_vertices):
                     index -= len(self._vectors)
-                    self._wheel_vertices[index] = randint(0, self.vertices-1)
+                    while(True):
+                        self._wheel_vertices[index] = randint(self.AMOUNT_OF_VERTICES/2, self.AMOUNT_OF_VERTICES-1)
+                        viable = True
+                        for (iteration, vertex) in zip(range(len(self._wheel_vertices)), self._wheel_vertices):
+                            if iteration != index:
+                                if vertex == self._wheel_vertices[index]:
+                                    viable = False
+                                    break
+                        if viable:
+                            break
                 else:
                     index -= len(self._vectors) 
                     index -= len(self._wheel_vertices)

@@ -4,7 +4,6 @@ from math import ceil, pi
 
 
 class Population:
-    vertices = 4
     _AMOUNT_OF_CANDIDATES = 10
     _AMOUNT_OF_CHILDREN = _AMOUNT_OF_CANDIDATES
     _TOURNAMENT_SIZE = 2
@@ -21,25 +20,7 @@ class Population:
 
     def _create_starting_population(self, candidates_amount):
         for candidate in range(candidates_amount):
-            # vectors = [(random() * 2 * pi, uniform(0.1, 4)) for vector in range(self.vertices)]
-            intervals = [0]
-            for i in range(0, self.vertices):
-                intervals.append(intervals[-1] + 360 / self.vertices)
-            vectors = []
-            for i in range(0, self.vertices):
-                vectors.append((uniform(intervals[i], intervals[i + 1]) * 3.14 / 180, uniform(0.1, 4)))
-
-            # vectors.sort()
-            wheel_vertices = []
-            wheel_vertices.append(randint(0, self.vertices - 1))
-            wheel_vertices.append(randint(0, self.vertices - 1))
-            wheel_properties = []
-            wheel_properties.append((uniform(0.5, 2), uniform(0.5, 2)))
-            wheel_properties.append((uniform(10, 40), uniform(10, 40)))
-            wheel_properties.append((uniform(0, 1), uniform(0, 1)))
-            wheel_properties.append((uniform(200, 200), uniform(200, 200)))
-            individual = Genotype(vectors, wheel_vertices, wheel_properties)
-            self._candidates.append(individual)
+            self._candidates.append(Genotype.create_new())
 
     def print_information(self):
         sum = 0

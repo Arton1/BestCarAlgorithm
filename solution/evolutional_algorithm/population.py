@@ -4,9 +4,9 @@ from math import ceil, pi
 
 
 class Population:
-    _AMOUNT_OF_CANDIDATES = 10
-    _AMOUNT_OF_CHILDREN = _AMOUNT_OF_CANDIDATES
-    _TOURNAMENT_SIZE = 2
+    _AMOUNT_OF_CANDIDATES = 50
+    _AMOUNT_OF_CHILDREN = 30
+    _TOURNAMENT_SIZE = 10
 
     def __init__(self,
                  candidates_amount=_AMOUNT_OF_CANDIDATES,
@@ -57,8 +57,11 @@ class Population:
                 return potential_parent
 
     def _tournament_select_individual(self, candidates):
-        tournament_candidates = sample(candidates, self._tournament_size)
-        return min(tournament_candidates, key=lambda x: x.get_fitness())
+        tournament_candidates = []
+        # for fighter in range(self._tournament_size):
+            # tournament_candidates.append(candidates[randint(0, len(candidates)-1)]) # ze zwracaniem
+        tournament_candidates = sample(candidates, self._tournament_size) # bez zwracania
+        return max(tournament_candidates, key=lambda x: x.get_fitness())
 
     def _ranking_select_individual(self, candidates):
         candidates.sort(key=lambda x: x.get_fitness())
@@ -74,9 +77,9 @@ class Population:
         return max(candidates, key=lambda x: x.get_fitness())
 
     def _select_pair_of_parents(self):
-        first_parent = self._roulette_select_individual(self._candidates)
+        first_parent = self._tournament_select_individual(self._candidates)
         self._candidates.remove(first_parent)
-        second_parent = self._roulette_select_individual(self._candidates)
+        second_parent = self._tournament_select_individual(self._candidates)
         self._candidates.append(first_parent)
         return first_parent, second_parent
 

@@ -84,7 +84,7 @@ class World(Framework):
                    (self.generation ,self.average/(self._population._AMOUNT_OF_CANDIDATES), time.time() - self.time_start, x))
 
         # if (time.time() - self.time_start > 2 and time.time() - self.time_start < 3 ) : self.start_engines()
-        if (time.time() - self.time_start > 10):  self.sim()
+        if (time.time() - self.time_start > 13):  self.sim()
 
 
 if __name__ == "__main__":

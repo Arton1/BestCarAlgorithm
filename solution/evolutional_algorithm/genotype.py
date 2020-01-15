@@ -4,9 +4,9 @@ from math import ceil, floor, pi
 
 class Genotype:
     _MUTATIONS_CHANCE = 1/5  # percentage of individuals that get changed
-    _MUTATION_POINTS_AMOUNT = 1
-    _AMOUNT_OF_CROSSOVER_POINTS = 1/2
-    AMOUNT_OF_VERTICES = 6
+    _MUTATION_POINTS_AMOUNT = 2
+    _AMOUNT_OF_CROSSOVER_POINTS = 6
+    AMOUNT_OF_VERTICES = 12
 
     def create_new():
         intervals = [0]
@@ -73,7 +73,7 @@ class Genotype:
     def create_pair_by_multipoints(self, other_parent):
         first_parent_genes = self._get_genes_from_parameters()
         second_parent_genes = self._get_genes_from_parameters()
-        indexes = sorted(sample(range(0, len(first_parent_genes)-1), ceil(len(first_parent_genes)*self._AMOUNT_OF_CROSSOVER_POINTS)))
+        indexes = sorted(sample(range(0, len(first_parent_genes)-1), self._AMOUNT_OF_CROSSOVER_POINTS))
         first_child_genes = []
         second_child_genes = []
         indexes_index = 0

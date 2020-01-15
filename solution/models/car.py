@@ -13,7 +13,6 @@ def create_cars(world, population, offset=(10, 5)):
 
 
 def create_car(world, genotype, offset):
-    vertices = 4
     x_offset, y_offset = offset
     points = []
     wheels = []
@@ -24,8 +23,8 @@ def create_car(world, genotype, offset):
 
     y_offset += max(wheel_radius[0], wheel_radius[1])
     chassis = world.CreateDynamicBody(position=(x_offset, y_offset), userData="car_chassis")
-    for index in range(vertices):
-        chassis.CreatePolygonFixture(vertices=[(0, 0), points[index % vertices], points[(index + 1) % vertices]], groupIndex=-1,
+    for index in range(Genotype.AMOUNT_OF_VERTICES):
+        chassis.CreatePolygonFixture(vertices=[(0, 0), points[index % Genotype.AMOUNT_OF_VERTICES], points[(index + 1) % Genotype.AMOUNT_OF_VERTICES]], groupIndex=-1,
                                      density=50,
                                     )
 

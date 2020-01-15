@@ -6,7 +6,7 @@ class Genotype:
     _MUTATIONS_CHANCE = 1/5  # percentage of individuals that get changed
     _MUTATION_POINTS_AMOUNT = 1
     _AMOUNT_OF_CROSSOVER_POINTS = 1/2
-    AMOUNT_OF_VERTICES = 4
+    AMOUNT_OF_VERTICES = 12
 
     def create_new():
         intervals = [0]
@@ -14,7 +14,7 @@ class Genotype:
             intervals.append(intervals[-1] + 360 / Genotype.AMOUNT_OF_VERTICES)
         vectors = []
         for i in range(0, Genotype.AMOUNT_OF_VERTICES):
-            vectors.append((uniform(intervals[i], intervals[i + 1]) * 3.14 / 180, uniform(0.1, 4)))
+            vectors.append((uniform(intervals[i], intervals[i + 1]) * 3.14 / 180, uniform(0.1, Genotype.AMOUNT_OF_VERTICES)))
         wheel_vertices = []
         wheel_vertices.append(randint(Genotype.AMOUNT_OF_VERTICES/2, Genotype.AMOUNT_OF_VERTICES-1))
         while(True):
@@ -28,10 +28,10 @@ class Genotype:
                 wheel_vertices.append(random_vertex)
                 break
         wheel_properties = []
-        wheel_properties.append((uniform(0.5, 2), uniform(0.5, 2)))
-        wheel_properties.append((uniform(10, 40), uniform(10, 40)))
-        wheel_properties.append((uniform(0, 1), uniform(0, 1)))
-        wheel_properties.append((uniform(200, 200), uniform(200, 200)))
+        wheel_properties.append((uniform(0.5, 2), uniform(0.5, 2))) # radius
+        wheel_properties.append((uniform(10, 40), uniform(10, 40))) # speed
+        wheel_properties.append((uniform(0, 1), uniform(0, 1))) # friction
+        wheel_properties.append((uniform(200, 200), uniform(200, 200))) # engine torque
         individual = Genotype(vectors, wheel_vertices, wheel_properties)
         return individual
         
@@ -98,7 +98,7 @@ class Genotype:
             indexes = sample(range(amount_of_genes), self._MUTATION_POINTS_AMOUNT)
             for index in indexes:
                 if index < len(self._vectors):
-                    self._vectors[index] = (uniform(2*pi/self.AMOUNT_OF_VERTICES*(index), 2*pi/self.AMOUNT_OF_VERTICES*(index+1)), uniform(0.1, 4))
+                    self._vectors[index] = (uniform(2*pi/self.AMOUNT_OF_VERTICES*(index), 2*pi/self.AMOUNT_OF_VERTICES*(index+1)), uniform(0.1, self.AMOUNT_OF_VERTICES))
                 elif index < len(self._vectors) + len(self._wheel_vertices):
                     index -= len(self._vectors)
                     while(True):

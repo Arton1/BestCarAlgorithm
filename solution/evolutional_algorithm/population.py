@@ -4,7 +4,7 @@ from math import ceil, pi
 
 
 class Population:
-    _AMOUNT_OF_CANDIDATES = 50
+    _AMOUNT_OF_CANDIDATES = 10
     _AMOUNT_OF_CHILDREN = _AMOUNT_OF_CANDIDATES
     _TOURNAMENT_SIZE = 2
 

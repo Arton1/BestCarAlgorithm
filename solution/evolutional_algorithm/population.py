@@ -1,12 +1,12 @@
 from solution.evolutional_algorithm.genotype import Genotype
-from random import randint, random, uniform, sample
+from random import randint, random, uniform, sample, seed
 from math import ceil, pi
 
 
 class Population:
-    _AMOUNT_OF_CANDIDATES = 50
+    _AMOUNT_OF_CANDIDATES = 10
     _AMOUNT_OF_CHILDREN = _AMOUNT_OF_CANDIDATES
-    _TOURNAMENT_SIZE = 10
+    _TOURNAMENT_SIZE = 5
 
     def __init__(self,
                  candidates_amount=_AMOUNT_OF_CANDIDATES,
@@ -19,8 +19,10 @@ class Population:
         self._create_starting_population(candidates_amount)
 
     def _create_starting_population(self, candidates_amount):
+        seed(11)
         for candidate in range(candidates_amount):
             self._candidates.append(Genotype.create_new())
+        seed()
 
     def print_information(self):
         print(f"Generacja: {self._generation}")
@@ -79,9 +81,9 @@ class Population:
         return max(candidates, key=lambda x: x.get_fitness())
 
     def _select_pair_of_parents(self):
-        first_parent = self._tournament_select_individual(self._candidates)
+        first_parent = self._roulette_select_individual(self._candidates)
         self._candidates.remove(first_parent)
-        second_parent = self._tournament_select_individual(self._candidates)
+        second_parent = self._roulette_select_individual(self._candidates)
         self._candidates.append(first_parent)
         return first_parent, second_parent
 

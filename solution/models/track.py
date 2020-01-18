@@ -7,7 +7,7 @@ def create_track(world):
         userData="track"
     )
     x, y1, dx = -19, 0, 5
-    vertices = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2.5, 1.5, 0, 0, 2, 5, 9, 7, 5, 0, -3, -2, 0, 3, 6, -10, 0, 0, 0, 1000]
+    vertices = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2.5, 1.5, 0, 0, 2, 5, 9, 7, 5, 0, -3, -2, 0, 3, 6, -10, 0, 0, 0, 1, 2, 3, 1, 0, 0, 1000]
     for y2 in vertices:  # iterate through vertices twice
         ground.CreateEdgeFixture(
             vertices=[(x, y1), (x + dx, y2)],

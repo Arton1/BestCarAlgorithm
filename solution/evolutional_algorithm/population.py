@@ -21,7 +21,7 @@ class Population:
 
     def _create_starting_population(self, candidates_amount, seed_value=None):
         if seed_value is not None:
-            seed(value)
+            seed(seed_value)
         for candidate in range(candidates_amount):
             self._candidates.append(Genotype.create_new())
         if seed_value is not None:

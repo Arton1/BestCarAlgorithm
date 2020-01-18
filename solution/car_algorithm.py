@@ -39,7 +39,7 @@ class World(Framework):
         self.time_start = time.time()
         self.lastInformation = (0, 0)
         self.f = open("average.txt", "w+")
-
+        self.step_counter = 0
     # evaluates every genotype and deletes car objects
     def stop_simulation(self):
         while len(self.world.bodies) > 2:
@@ -56,6 +56,7 @@ class World(Framework):
         self.springs.clear()
         self.springs = create_cars(self.world, self._population)
         self.time_start = time.time()
+        self.step_counter = 0
         return statistics
 
     def start_engines(self):
@@ -81,10 +82,11 @@ class World(Framework):
                 x = 10
         self.viewCenter = (x, 20)
         generation, average = self.lastInformation
-        self.Print(f"generation = {generation:3}, average = {average:.2f}, time = {time.time()-self.time_start:.2f}, best = {x:.2f}")
-        if (time.time() - self.time_start > 13): 
+        self.Print(f"generation = {generation:3}, average = {average:.2f}, time = {time.time()-self.time_start:.2f}, step = {self.step_counter}/750, best = {x:.2f}")
+        if self.step_counter > 750:
             self.lastInformation = self.sim()
             self.f.write(f"{self.lastInformation[1]}\n")
+        self.step_counter += 1
 
 if __name__ == "__main__":
     main(World)

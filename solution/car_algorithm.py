@@ -25,13 +25,15 @@ from .framework import (Framework, Keys, main)
 from solution.evolutional_algorithm.population import Population
 import time
 
+# Aby nie brać pod uwagę seed, ustaw go na None
+SEED_VALUE = 11
 
 # Creating first population and the track
 class World(Framework):
     def __init__(self):
         super(World, self).__init__()
         create_track(self.world)
-        self._population = Population()
+        self._population = Population(seed=SEED_VALUE)
         # self.springs = nice_car(self.world, offset=(10, 10))
         self.springs = create_cars(self.world, self._population)
         self.time_start = time.time()

@@ -11,18 +11,21 @@ class Population:
     def __init__(self,
                  candidates_amount=_AMOUNT_OF_CANDIDATES,
                  children_amount=_AMOUNT_OF_CHILDREN,
+                 seed=None
                  ):
         self._candidates = []
         self._generation = 1
         self._children_amount = children_amount
         self._tournament_size = self._TOURNAMENT_SIZE
-        self._create_starting_population(candidates_amount)
+        self._create_starting_population(candidates_amount, seed)
 
-    def _create_starting_population(self, candidates_amount):
-        seed(11)
+    def _create_starting_population(self, candidates_amount, seed_value=None):
+        if seed_value is not None:
+            seed(value)
         for candidate in range(candidates_amount):
             self._candidates.append(Genotype.create_new())
-        seed()
+        if seed_value is not None:
+            seed()
 
     def print_information(self):
         print(f"Generacja: {self._generation}")

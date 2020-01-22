@@ -26,7 +26,7 @@ from solution.evolutional_algorithm.population import Population
 import time
 
 # Aby nie brać pod uwagę seed, ustaw go na None
-SEED_VALUE = 11
+SEED_VALUE = None
 
 # Creating first population and the track
 class World(Framework):
